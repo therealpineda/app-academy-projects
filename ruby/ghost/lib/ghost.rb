@@ -20,24 +20,27 @@ class Game
   def display
     system("clear")
     puts "G-H-O-S-T"
-    # if losses.values.any? { |v| v > 0 }
-      puts "\nScoreboard"
-      players.each do |player|
-        count = losses[player]
-        # next unless count > 0
-        puts "#{player.name}: #{"GHOST"[0...count]}"
-      end
-    # end
+
+    puts "\nScoreboard"
+    players.each do |player|
+      rounds_lost = losses[player]
+      puts "#{player.name}: #{"GHOST"[0...rounds_lost]}"
+    end
+
+    frag_display
+  end
+
+  def eliminate_player
+    puts "GHOST! #{previous_player.name} has been eliminated..."
+    players.delete(previous_player)
+  end
+
+  def frag_display
     puts
     puts "-" * 30
     puts "Current fragment: #{fragment}"
     puts "-" * 30
     puts
-  end
-
-  def eliminate_player
-    puts "GHOST! #{previous_player.name} has been eliminated..."
-    players.delete_if { |pl| pl == previous_player }
   end
 
   def game_over?
@@ -46,19 +49,25 @@ class Game
 
   def next_player!
     self.previous_player = current_player
+
     next_idx = (players.index(current_player) + 1) % players.length
     self.current_player = players[next_idx]
   end
 
   def play
     until game_over?
+
       until round_over?
+
         play_round(current_player)
         next_player!
       end
+
       display
+
       puts "#{previous_player.name} loses. They spelled: \"#{fragment}\""
       update_score
+
       system("sleep 2")
       reset_board
     end
@@ -98,11 +107,12 @@ class Game
   end
 
   def valid_play?(letter)
-    check_frag = "#{fragment}#{letter}"
+    check = "#{fragment}#{letter}"
     dictionary.each do |word|
-      return true if word[0...check_frag.length] == check_frag
+      return true if word[0...check.length] == check
     end
-    puts "\"#{check_frag}\" is not the beginning of any word!"
+
+    puts "\"#{check}\" is not the beginning of any word!"
     system("sleep 2")
     false
   end
@@ -119,9 +129,7 @@ if __FILE__ == $PROGRAM_NAME
     puts "Please enter next player, or [ENTER] when all players have entered."
   end
   players = [AIPlayer.new("HAL")]
-  names.each do |name|
-    players << Player.new(name)
-  end
+  names.each { |name| players << Player.new(name) }
   game = Game.new(players)
   game.play
 end

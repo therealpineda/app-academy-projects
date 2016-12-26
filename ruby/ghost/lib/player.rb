@@ -1,5 +1,3 @@
-require 'byebug'
-
 class Player
   attr_reader :name
 
@@ -64,7 +62,5 @@ class AIPlayer < Player
     self.winning_words = words.select do |word|
       winning_word_length_range === word.length && !dictionary.include?(word[0..f_length])
     end
-
-    debugger
   end
 end
