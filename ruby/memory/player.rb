@@ -1,5 +1,4 @@
 require_relative 'board'
-require 'byebug'
 
 class Player
   attr_reader :name
@@ -22,6 +21,7 @@ class Player
     guess.split(",").map(&:to_i)
   end
 
+  # dummy methods
   def receive_match(*pos)
   end
 

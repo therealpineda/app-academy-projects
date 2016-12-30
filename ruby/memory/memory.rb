@@ -20,8 +20,8 @@ class MemoryGame
     else
       board.render
       if board[prev_guess].value == board[guessed_pos].value
-        player.receive_match(prev_guess, guessed_pos)
         puts "Match!"
+        player.receive_match(prev_guess, guessed_pos)
       else
         puts "No match..."
         board[prev_guess].hide
@@ -42,7 +42,6 @@ class MemoryGame
       while true
         guessed_pos = player.get_guess(board)
         break unless board[guessed_pos].face_up
-        # debugger
         puts "That card is already face-up"
       end
       make_guess(guessed_pos)
@@ -53,7 +52,6 @@ class MemoryGame
 end
 
 if __FILE__ == $0
-  g = MemoryGame.new(Board.new(4), ComputerPlayer.new("Chris"))
+  g = MemoryGame.new(Board.new(6), ComputerPlayer.new)
   g.play
-
 end

@@ -21,8 +21,9 @@ class Board
 
   def populate(size)
     cards = ('a'..'z').to_a
-    cards *= 2 until cards.length > size
-    values = cards.take((size * size) / 2) * 2
+    pairs_needed = (size * size) / 2
+    cards *= 2 until cards.length > pairs_needed
+    values = cards.take(pairs_needed) * 2
     values.shuffle!
     (0...size).each do |row|
       (0...size).each do |col|
